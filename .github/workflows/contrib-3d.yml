@@ -27,13 +27,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
-        run: python3 .github/scripts/contrib_3d.py assets/contrib-3d.svg
+        run: python3 .github/scripts/contrib_3d.py assets README.md
 
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/contrib-3d.svg
+          git add assets/contrib-3d*.svg README.md
           git diff --cached --quiet && exit 0
-          git commit -m "chore: refresh 3D contribution skyline"
+          git commit -m "chore: refresh contribution skylines"
           git push

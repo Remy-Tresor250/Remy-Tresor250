@@ -1,7 +1,8 @@
-"""Render the last year of GitHub contributions as an animated isometric 3D skyline.
+"""Render GitHub contributions as animated isometric skylines: the last 12 months,
+plus one per earlier year, and list those years in the README.
 
 Stdlib only. Needs GITHUB_TOKEN; USERNAME defaults to the repo owner.
-Usage: python contrib_3d.py <output.svg>
+Usage: python contrib_3d.py [assets_dir] [readme]
 """
 import base64
 import json
@@ -10,9 +11,10 @@ import sys
 import urllib.request
 
 QUERY = """
-query($login: String!) {
+query($login: String!, $from: DateTime, $to: DateTime) {
   user(login: $login) {
-    contributionsCollection {
+    contributionsCollection(from: $from, to: $to) {
+      contributionYears
       contributionCalendar {
         totalContributions
         weeks { contributionDays { contributionCount date weekday } }
@@ -27,8 +29,11 @@ PAPER, PAPER_DK, INK = "#FFF7EC", "#F3E6D3", "#2B2340"
 RAMP = ["#FF8F70", "#FFC94D", "#7DD9B8", "#8EC9FF", "#B7A4FF", "#FF9EC4"]
 
 
-def fetch(login, token):
-    body = json.dumps({"query": QUERY, "variables": {"login": login}}).encode()
+def fetch(login, token, year=None):
+    variables = {"login": login}
+    if year:
+        variables.update({"from": f"{year}-01-01T00:00:00Z", "to": f"{year}-12-31T23:59:59Z"})
+    body = json.dumps({"query": QUERY, "variables": variables}).encode()
     req = urllib.request.Request("https://api.github.com/graphql", data=body, method="POST")
     req.add_header("Authorization", "Bearer " + token)
     req.add_header("Content-Type", "application/json")
@@ -36,7 +41,8 @@ def fetch(login, token):
         data = json.load(resp)
     if "errors" in data:
         raise SystemExit(f"GraphQL error: {data['errors']}")
-    return data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+    coll = data["data"]["user"]["contributionsCollection"]
+    return coll["contributionCalendar"], coll["contributionYears"]
 
 
 def font_face(family, filename):
@@ -57,7 +63,7 @@ def rgb(c, k=1.0):
     return "#%02x%02x%02x" % tuple(max(0, min(255, round(v * k))) for v in c)
 
 
-def render(cal, login):
+def render(cal, login, subtitle):
     W, H = 1000, 440
     weeks = cal["weeks"]
     counts = sorted(d["contributionCount"] for w in weeks for d in w["contributionDays"])
@@ -98,8 +104,8 @@ def render(cal, login):
 
     total = cal["totalContributions"]
     fonts = font_face("Grotesk", "grotesk-700.woff2") + font_face("Hand", "caveat-700.woff2")
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="{total} contributions in the last year, as a 3D skyline">
-<title>{login} · {total} contributions in the last year</title>
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="{total} contributions {subtitle}, as a 3D skyline">
+<title>{login} · {total} contributions {subtitle}</title>
 <defs>
 <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="{PAPER_DK}"/></pattern>
 <style>
@@ -116,19 +122,58 @@ def render(cal, login):
 <rect width="{W}" height="{H}" rx="28" fill="url(#dots)"/>
 <rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="27" fill="none" stroke="{PAPER_DK}" stroke-width="2"/>
 <text class="h" x="40" y="62">{total:,} contributions</text>
-<text class="k" x="42" y="96" transform="rotate(-2 42 96)">in the last year, stacked up</text>
+<text class="k" x="42" y="96" transform="rotate(-2 42 96)">{subtitle}, stacked up</text>
 {"".join(out)}
 </svg>'''
 
 
+def years_block(years):
+    """The README rows that unfold earlier years."""
+    if not years:
+        return ""
+    rows = ['<p align="center"><sub>rewind to an earlier year</sub></p>', ""]
+    for year, total in years:
+        rows += ["<details>",
+                 f"<summary><b>{year}</b> &nbsp;·&nbsp; {total:,} contributions</summary>",
+                 "<br/>",
+                 f'<img src="./assets/contrib-3d-{year}.svg" width="100%" alt="My GitHub contributions in {year}, stacked up as a 3D skyline." />',
+                 "</details>", ""]
+    return "\n".join(rows)
+
+
+def update_readme(path, block):
+    start, end = "<!-- years:start -->", "<!-- years:end -->"
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    if start not in text or end not in text:
+        return
+    head, rest = text.split(start, 1)
+    _, tail = rest.split(end, 1)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(f"{head}{start}\n{block}{end}{tail}")
+
+
 def main():
-    out = sys.argv[1] if len(sys.argv) > 1 else "assets/contrib-3d.svg"
+    assets = sys.argv[1] if len(sys.argv) > 1 else "assets"
+    readme = sys.argv[2] if len(sys.argv) > 2 else "README.md"
     login = os.environ.get("USERNAME") or os.environ["GITHUB_REPOSITORY_OWNER"]
-    cal = fetch(login, os.environ["GITHUB_TOKEN"])
-    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
-    with open(out, "w", encoding="utf-8") as f:
-        f.write(render(cal, login))
-    print(f"wrote {out}: {cal['totalContributions']} contributions")
+    token = os.environ["GITHUB_TOKEN"]
+    os.makedirs(assets, exist_ok=True)
+
+    cal, all_years = fetch(login, token)
+    with open(os.path.join(assets, "contrib-3d.svg"), "w", encoding="utf-8") as f:
+        f.write(render(cal, login, "in the last year"))
+    print(f"last 12 months: {cal['totalContributions']} contributions")
+
+    this_year = int(max(d["date"] for w in cal["weeks"] for d in w["contributionDays"])[:4])
+    past = []
+    for year in sorted((y for y in all_years if y < this_year), reverse=True):
+        ycal, _ = fetch(login, token, year)
+        with open(os.path.join(assets, f"contrib-3d-{year}.svg"), "w", encoding="utf-8") as f:
+            f.write(render(ycal, login, f"in {year}"))
+        past.append((year, ycal["totalContributions"]))
+        print(f"{year}: {ycal['totalContributions']} contributions")
+    update_readme(readme, years_block(past))
 
 
 if __name__ == "__main__":
