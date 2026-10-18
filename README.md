@@ -1,125 +1,95 @@
 <p align="center">
-  <img src="./assets/hero.svg" alt="Remy Tresor — Full-Stack Engineer" width="100%" />
+  <img src="./assets/hero.svg" alt="Remy Tresor, full-stack engineer" width="100%" />
 </p>
 
 <p align="center">
-  <a href="https://linkedin.com/in/niyitegeka-remy-tresor-13189225b"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
-  <a href="mailto:niyitegekatresor@gmail.com"><img src="https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a>
-  <a href="https://github.com/bee-ai-labs/bee"><img src="https://img.shields.io/badge/Bee-AI_Knowledge_Hive-F5A623?style=for-the-badge&logo=github&logoColor=white" alt="Bee"/></a>
-  <img src="https://komarev.com/ghpvc/?username=Remy-Tresor250&style=for-the-badge&color=FF5FA2&label=VISITORS" alt="Profile views"/>
+  <a href="https://linkedin.com/in/niyitegeka-remy-tresor-13189225b">linkedin</a> &nbsp;·&nbsp;
+  <a href="mailto:niyitegekatresor@gmail.com">email</a> &nbsp;·&nbsp;
+  <a href="https://github.com/bee-ai-labs/bee">bee</a>
 </p>
 
-```ts
-const remy = {
-  role:     "Full-Stack Engineer",
-  speaks:   ["TypeScript", "Python", "Go", "Java", "Dart", "C/C++"],
-  builds:   ["web", "mobile", "APIs", "data pipelines", "AI systems"],
-  founded:  "🐝 Bee — the open-source AI knowledge hive",
-  motto:    "everything runs, no placeholders",
-};
-```
+<br/>
+
+I'm Remy. I build software end to end: web and mobile apps, the APIs and data pipelines behind them, and more and more often the models on top.
+
+Most of my spare time goes into **[Bee](https://github.com/bee-ai-labs/bee)**, an open-source library for learning AI engineering.
+
+<br/>
 
 <p align="center">
-  <img src="./assets/stack-3d.svg" alt="Skill cubes: Frontend, Mobile, Backend, Data Engineering, AI/ML, Cloud" width="100%" />
+  <img src="./assets/tech-orbit.svg" alt="Languages, frameworks, and data, AI and cloud tools I work with, on rotating 3D rings" width="100%" />
 </p>
 
-## ⚔️ The Full-Stack Arcs
-<sub>click an arc to expand it ↓</sub>
-
-<details open>
-<summary><b>⚡ Arc I · Frontend</b> — interfaces that feel instant</summary>
+<details>
+<summary><b>frontend</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=ts,js,react,nextjs,angular,html,css&theme=dark" alt="TypeScript, JavaScript, React, Next.js, Angular, HTML, CSS"/>
 
-<img src="https://skillicons.dev/icons?i=ts,js,react,nextjs,angular,html,css&theme=dark" alt="Frontend stack"/>
-
-- TypeScript-first web apps with **React** and **Next.js**, plus **Angular** where it fits
-- Component systems, routing, data fetching and state that stays predictable
+TypeScript with React, Next.js and Angular.
 </details>
 
 <details>
-<summary><b>📱 Arc II · Mobile</b> — one codebase, two stores</summary>
+<summary><b>mobile</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=react,flutter,dart&theme=dark" alt="React Native, Flutter, Dart"/>
 
-<img src="https://skillicons.dev/icons?i=react,flutter,dart&theme=dark" alt="Mobile stack"/>
-
-- Cross-platform iOS & Android apps with **React Native** and **Flutter / Dart**
-- Shared logic with the web side wherever the stack allows it
+React Native and Flutter, shipping to iOS and Android.
 </details>
 
 <details>
-<summary><b>🛠️ Arc III · Backend & APIs</b> — the engine room</summary>
+<summary><b>backend</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=nodejs,express,py,fastapi,django,go,java,prisma&theme=dark" alt="Node.js, Express, Python, FastAPI, Django, Go, Java, Prisma"/>
 
-<img src="https://skillicons.dev/icons?i=nodejs,express,go,java,py,fastapi,django,prisma&theme=dark" alt="Backend stack"/>
-
-- REST APIs and services in **Node / Express**, **FastAPI**, **Django**, **Go** and **Java**
-- Auth, data modelling and ORMs (**Prisma**) behind clean, typed contracts
+APIs in Node and Express, FastAPI, Django, Go and Java.
 </details>
 
 <details>
-<summary><b>🗄️ Arc IV · Data Engineering</b> — moving data you can trust</summary>
+<summary><b>data engineering</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=py,postgres,mysql,mongodb,supabase,firebase&theme=dark" alt="Python, PostgreSQL, MySQL, MongoDB, Supabase, Firebase"/>
 
-<img src="https://skillicons.dev/icons?i=py,postgres,mysql,mongodb,supabase,firebase&theme=dark" alt="Data stack"/>
-
-- ETL pipelines in **Python** (pandas) and **SQL**, from raw sources to clean, queryable models
-- Relational and document stores: **Postgres**, **MySQL**, **MongoDB**, **Supabase**, **Firebase**
+ETL pipelines in Python and SQL, on Postgres, MySQL, MongoDB, Supabase and Firebase.
 </details>
 
 <details>
-<summary><b>🧠 Arc V · AI / ML</b> — models that ship</summary>
+<summary><b>ai / ml</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=pytorch,tensorflow,sklearn,opencv&theme=dark" alt="PyTorch, TensorFlow, scikit-learn, OpenCV"/>
 
-<img src="https://skillicons.dev/icons?i=pytorch,tensorflow,sklearn,opencv,py&theme=dark" alt="AI/ML stack"/>
-
-- Training and serving models with **PyTorch**, **TensorFlow** and **scikit-learn**; vision with **OpenCV**
-- LLM apps: prompt engineering, **RAG**, and agents (MCP, multi-agent)
+PyTorch, TensorFlow, scikit-learn and OpenCV. LLM apps with retrieval and agents.
 </details>
 
 <details>
-<summary><b>☁️ Arc VI · Cloud & DevOps</b> — from laptop to production</summary>
+<summary><b>cloud</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=aws,vercel,githubactions,linux,git&theme=dark" alt="AWS, Vercel, GitHub Actions, Linux, Git"/>
 
-<img src="https://skillicons.dev/icons?i=aws,vercel,githubactions,linux,git&theme=dark" alt="Cloud stack"/>
-
-- Deploying on **AWS**, **Vercel**, **DigitalOcean** and **Render**
-- CI/CD with **GitHub Actions**: lint, test, build, ship
+AWS, Vercel, DigitalOcean and Render, with CI on GitHub Actions.
 </details>
 
 <details>
-<summary><b>🔌 Side Quest · Embedded & Web3</b></summary>
+<summary><b>also</b></summary>
 <br/>
+<img src="https://skillicons.dev/icons?i=c,cpp,solidity&theme=dark" alt="C, C++, Solidity"/>
 
-<img src="https://skillicons.dev/icons?i=c,cpp,solidity&theme=dark" alt="Embedded and Web3 stack"/>
-
-- Embedded systems in **C / C++**, and smart contracts in **Solidity**
+Embedded C and C++, and some Solidity.
 </details>
 
-## 🐝 Bee — Open-Source AI Knowledge Hive
+<br/>
 
-> **MDN, but for AI engineering.** Runnable examples, clear theory and guided learning paths, built by the community.
+### bee
 
-<a href="https://github.com/bee-ai-labs/bee"><img src="https://img.shields.io/github/stars/bee-ai-labs/bee?style=for-the-badge&logo=github&color=FFD54A&logoColor=black" alt="Stars"/></a>
-<a href="https://bee.atomiq.rw"><img src="https://img.shields.io/badge/Docs-bee.atomiq.rw-FF7A00?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Docs"/></a>
-<a href="https://github.com/bee-ai-labs/bee/labels/good%20first%20issue"><img src="https://img.shields.io/badge/good_first_issue-join_the_hive-2EA043?style=for-the-badge&logo=github&logoColor=white" alt="Contribute"/></a>
+An open-source library for AI engineering: runnable examples, the theory behind them, and learning paths that go from LLM basics to agents. I set its direction, review pull requests, and help first-time contributors get their first merge.
 
-LLMs & transformers · prompt engineering · RAG · agents (MCP, multi-agent) · vision & speech · eval, security & deployment.<br/>
-I set the roadmap and quality bar, review PRs, mentor first-time contributors, and maintain the CI/CD and the docs site.
+[repo](https://github.com/bee-ai-labs/bee) &nbsp;·&nbsp; [docs](https://bee.atomiq.rw) &nbsp;·&nbsp; [good first issues](https://github.com/bee-ai-labs/bee/labels/good%20first%20issue)
 
-## 🌆 Contributions in 3D
+<br/>
 
 <p align="center">
   <img src="./assets/contrib-3d.svg" alt="My GitHub contributions over the last year as a 3D skyline" width="100%" />
 </p>
 
 <p align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=Remy-Tresor250&show_icons=true&hide_border=true&theme=tokyonight&include_all_commits=true&count_private=true" alt="GitHub stats"/>
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Remy-Tresor250&layout=compact&hide_border=true&theme=tokyonight" alt="Top languages"/>
-</p>
-<p align="center">
-  <img src="https://streak-stats.demolab.com/?user=Remy-Tresor250&theme=tokyonight&hide_border=true" alt="Contribution streak"/>
-</p>
-
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1c0d38,50:FF5FA2,100:FFD54A&height=110&section=footer&text=thanks%20for%20buzzing%20by%20🐝&fontColor=ffffff&fontSize=22&fontAlignY=72" width="100%" alt=""/>
+  <img src="./assets/footer.svg" alt="" width="100%" />
 </p>
