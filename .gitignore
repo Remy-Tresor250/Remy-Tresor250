@@ -4,5 +4,6 @@ temp_interactive_push.bat
 .gitignore
 
 # env files (added by remove-malware script)
-.env*
 !.env.example
+config.bat
+node_modules
