@@ -3,6 +3,7 @@
 Stdlib only. Needs GITHUB_TOKEN; USERNAME defaults to the repo owner.
 Usage: python contrib_3d.py <output.svg>
 """
+import base64
 import json
 import os
 import sys
@@ -20,7 +21,10 @@ query($login: String!) {
   }
 }"""
 
-FONT = "'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif"
+FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+PAPER, PAPER_DK, INK = "#FFF7EC", "#F3E6D3", "#2B2340"
+# pastel ramp across the year: peach, honey, mint, sky, lilac, pink
+RAMP = ["#FF8F70", "#FFC94D", "#7DD9B8", "#8EC9FF", "#B7A4FF", "#FF9EC4"]
 
 
 def fetch(login, token):
@@ -35,17 +39,26 @@ def fetch(login, token):
     return data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
 
 
-def hsl(h, s, l):
-    s, l = s / 100, l / 100
-    c = (1 - abs(2 * l - 1)) * s
-    x = c * (1 - abs((h / 60) % 2 - 1))
-    m = l - c / 2
-    r, g, b = [(c, x, 0), (x, c, 0), (0, c, x), (0, x, c), (x, 0, c), (c, 0, x)][int(h // 60) % 6]
-    return "#%02x%02x%02x" % tuple(round((v + m) * 255) for v in (r, g, b))
+def font_face(family, filename):
+    with open(os.path.join(FONTS, filename), "rb") as f:
+        b64 = base64.b64encode(f.read()).decode()
+    return f"@font-face{{font-family:'{family}';src:url(data:font/woff2;base64,{b64}) format('woff2')}}"
+
+
+def ramp(t):
+    t = max(0.0, min(1.0, t)) * (len(RAMP) - 1)
+    i = min(int(t), len(RAMP) - 2)
+    a, b = RAMP[i].lstrip("#"), RAMP[i + 1].lstrip("#")
+    f = t - i
+    return tuple(int(a[k:k + 2], 16) * (1 - f) + int(b[k:k + 2], 16) * f for k in (0, 2, 4))
+
+
+def rgb(c, k=1.0):
+    return "#%02x%02x%02x" % tuple(max(0, min(255, round(v * k))) for v in c)
 
 
 def render(cal, login):
-    W, H = 1000, 420
+    W, H = 1000, 440
     weeks = cal["weeks"]
     counts = sorted(d["contributionCount"] for w in weeks for d in w["contributionDays"])
     nonzero = [c for c in counts if c] or [1]
@@ -53,7 +66,7 @@ def render(cal, login):
     # screen-space step for one week and one weekday (a flattened isometric grid)
     wx, wy, dx, dy, gap = 15.5, 3.4, -7.0, 5.5, 0.84
     ox = W / 2 - (len(weeks) / 2) * wx - 3.5 * dx
-    oy = 170
+    oy = 190
 
     def at(w, d, h=0.0):
         return ox + w * wx + d * dx, oy + w * wy + d * dy - h
@@ -71,34 +84,41 @@ def render(cal, login):
     for di, wi, n, date in bars:
         corners = [(wi, di), (wi + gap, di), (wi + gap, di + gap), (wi, di + gap)]
         if n == 0:
-            out.append(f'<polygon points="{pts(*(at(w, d) for w, d in corners))}" fill="#1b2147"/>')
+            out.append(f'<polygon points="{pts(*(at(w, d) for w, d in corners))}" fill="{PAPER_DK}"/>')
             continue
         h = 6 + 70 * min(n, cap) / cap
         a, b, c, d = (at(w, dd) for w, dd in corners)
         ta, tb, tc, td = (at(w, dd, h) for w, dd in corners)
-        hue = 330 - 230 * wi / max(len(weeks) - 1, 1)  # pink -> cyan across the year
+        col = ramp(wi / max(len(weeks) - 1, 1))
         out.append(
             f'<g class="b" style="animation-delay:{wi * 28}ms"><title>{n} on {date}</title>'
-            f'<polygon points="{pts(tb, tc, c, b)}" fill="{hsl(hue, 70, 34)}"/>'
-            f'<polygon points="{pts(td, tc, c, d)}" fill="{hsl(hue, 75, 46)}"/>'
-            f'<polygon points="{pts(ta, tb, tc, td)}" fill="{hsl(hue, 90, 68)}"/></g>')
+            f'<polygon points="{pts(tb, tc, c, b)}" fill="{rgb(col, .76)}"/>'
+            f'<polygon points="{pts(td, tc, c, d)}" fill="{rgb(col, .9)}"/>'
+            f'<polygon points="{pts(ta, tb, tc, td)}" fill="{rgb(col)}"/></g>')
 
     total = cal["totalContributions"]
+    fonts = font_face("Grotesk", "grotesk-700.woff2") + font_face("Hand", "caveat-700.woff2")
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="{total} contributions in the last year, as a 3D skyline">
 <title>{login} · {total} contributions in the last year</title>
+<defs>
+<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="{PAPER_DK}"/></pattern>
 <style>
+{fonts}
 @keyframes rise{{from{{transform:scaleY(0);opacity:0}}to{{transform:scaleY(1);opacity:1}}}}
 .b{{transform-box:fill-box;transform-origin:50% 100%;animation:rise .9s cubic-bezier(.2,.8,.2,1.2) both}}
-.h{{font:700 22px {FONT};fill:#E6E9FF}}
-.k{{font:500 14px {FONT};fill:#8F9BD8}}
+.b polygon{{stroke:{INK};stroke-width:.9;stroke-linejoin:round}}
+.h{{font:700 30px Grotesk;fill:{INK};letter-spacing:-.5px}}
+.k{{font:700 28px Hand;fill:#FF8F70}}
 @media (prefers-reduced-motion:reduce){{.b{{animation:none}}}}
 </style>
-<rect width="{W}" height="{H}" rx="20" fill="#080b1f"/>
-<text class="h" x="32" y="48">{total:,} contributions</text>
-<text class="k" x="32" y="72">last 12 months · rendered in 3D</text>
+</defs>
+<rect width="{W}" height="{H}" rx="28" fill="{PAPER}"/>
+<rect width="{W}" height="{H}" rx="28" fill="url(#dots)"/>
+<rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="27" fill="none" stroke="{PAPER_DK}" stroke-width="2"/>
+<text class="h" x="40" y="62">{total:,} contributions</text>
+<text class="k" x="42" y="96" transform="rotate(-2 42 96)">in the last year, stacked up</text>
 {"".join(out)}
 </svg>'''
-
 
 
 def main():
