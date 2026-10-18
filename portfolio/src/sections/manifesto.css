@@ -1,0 +1,90 @@
+.manifesto {
+  padding-top: 26vh;
+  padding-bottom: 16vh;
+}
+.mf-text {
+  margin-top: 40px;
+  font-size: clamp(1.9rem, 4.3vw, 4.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+  max-width: 19ch;
+  max-width: min(1400px, 92%);
+  text-wrap: balance;
+}
+.mf-photos {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  margin-top: 18vh;
+  min-height: 90vh;
+}
+.mf-photo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mf-a {
+  grid-column: 2 / span 5;
+}
+.mf-b {
+  grid-column: 8 / span 4;
+  margin-top: 30vh;
+}
+.mf-frame {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.mf-photo figcaption {
+  color: var(--mute);
+  display: flex;
+  gap: 14px;
+}
+.mf-photo figcaption span {
+  color: var(--ion);
+}
+.mf-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 16vh;
+}
+.mf-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mf-line {
+  height: 1px;
+  background: var(--line);
+  transform-origin: left;
+}
+.mf-n {
+  font-size: clamp(2.8rem, 5vw, 5.4rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+.mf-l {
+  color: var(--mute);
+  max-width: 24ch;
+}
+@media (max-width: 900px) {
+  .mf-photos {
+    grid-template-columns: repeat(6, 1fr);
+    min-height: auto;
+    gap: 16px;
+  }
+  .mf-a {
+    grid-column: 1 / span 4;
+  }
+  .mf-b {
+    grid-column: 3 / span 4;
+    margin-top: -6vh;
+  }
+  .mf-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}

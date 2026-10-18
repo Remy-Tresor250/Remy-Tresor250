@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<!--
+  Project "frames": art-directed covers composed from each product's real brand assets.
+  Rendered to stills and seamless 8s loops by scripts/render-frames.mjs.
+  Every animation period divides 8s so the recorded loop is seamless.
+-->
+<style>
+@font-face { font-family: 'Inter Tight'; src: url('fonts/inter-tight.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Instrument Serif'; src: url('fonts/instrument-serif.woff2') format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; src: url('fonts/instrument-serif-italic.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; src: url('fonts/jetbrains-mono.woff2') format('woff2'); font-weight: 100 900; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1600px; height: 1000px; overflow: hidden; background: #000; }
+body { font-family: 'Inter Tight', sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+.f { position: absolute; inset: 0; overflow: hidden; display: none; }
+.f.on { display: block; }
+.abs { position: absolute; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 15px; letter-spacing: .12em; text-transform: uppercase; }
+.serif { font-family: 'Instrument Serif', serif; }
+.meta { position: absolute; left: 64px; top: 56px; display: flex; gap: 18px; align-items: center; opacity: .78; z-index: 20; }
+.meta i { width: 46px; height: 1px; background: currentColor; display: block; }
+.sig { position: absolute; right: 64px; top: 56px; opacity: .6; z-index: 20; }
+.grain::after { content: ''; position: absolute; inset: -50%; pointer-events: none; z-index: 30; opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.glass { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-radius: 22px; }
+.pill { position: absolute; padding: 14px 22px; border-radius: 99px; font-weight: 600; font-size: 20px; display: flex; gap: 10px; align-items: center; white-space: nowrap; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.shadow { filter: drop-shadow(0 40px 60px rgba(0,0,0,.45)); }
+
+@keyframes float { 0%,100% { transform: translate3d(0,0,0) } 50% { transform: translate3d(0,-14px,0) } }
+@keyframes floatB { 0%,100% { transform: translate3d(0,0,0) rotate(var(--r,0deg)) } 50% { transform: translate3d(0,12px,0) rotate(var(--r,0deg)) } }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes drift { 0%,100% { transform: translate3d(0,0,0) scale(1) } 50% { transform: translate3d(60px,-40px,0) scale(1.12) } }
+@keyframes drift2 { 0%,100% { transform: translate3d(0,0,0) scale(1.1) } 50% { transform: translate3d(-70px,50px,0) scale(.95) } }
+@keyframes pulse { 0%,100% { transform: scale(1); opacity: .9 } 50% { transform: scale(1.6); opacity: 0 } }
+@keyframes scan { 0%,100% { transform: translateY(0) } 50% { transform: translateY(520px) } }
+@keyframes bar { 0%,100% { transform: scaleY(.25) } 50% { transform: scaleY(1) } }
+@keyframes dash { to { stroke-dashoffset: -240 } }
+@keyframes kb { 0%,100% { transform: scale(1.04) translate(0,0) } 50% { transform: scale(1.1) translate(-14px,-8px) } }
+@keyframes blink { 0%,40%,100% { opacity: 1 } 50%,90% { opacity: .25 } }
+
+/* ─────────── LIBBLIO ─────────── */
+.libblio { background: radial-gradient(1100px 800px at 30% 40%, #1747ff 0%, #0a1f8f 38%, #030617 78%); }
+.libblio .stage { position: absolute; left: 380px; top: 210px; width: 1100px; perspective: 1400px; animation: float 8s ease-in-out infinite; }
+.libblio .dash { width: 1100px; border-radius: 18px; transform: rotateX(22deg) rotateY(-24deg) rotateZ(6deg); transform-origin: 40% 50%; box-shadow: 0 80px 120px rgba(0,0,30,.6), 0 0 0 1px rgba(255,255,255,.25); }
+.libblio .ov { left: 90px; top: 330px; width: 330px; border-radius: 18px; box-shadow: 0 50px 80px rgba(0,0,40,.55); --r: -6deg; animation: floatB 8s ease-in-out infinite; }
+.libblio .badge { right: 64px; bottom: 54px; width: 230px; height: 230px; }
+.libblio .badge svg { animation: spin 16s linear infinite; }
+.libblio .badge .core { position: absolute; inset: 58px; border-radius: 50%; background: #fff; color: #0a1f8f; display: grid; place-items: center; text-align: center; font-weight: 700; line-height: 1; }
+.libblio .logo { left: 64px; bottom: 64px; display: flex; align-items: center; gap: 18px; font-weight: 700; font-size: 44px; letter-spacing: -.02em; }
+.libblio .logo img { height: 34px; filter: brightness(0) invert(1); }
+
+/* ─────────── COLLIS ─────────── */
+.collis { background: linear-gradient(135deg, #0a86ff 0%, #0458d6 45%, #011a4d 100%); }
+.collis .streak { width: 1400px; height: 380px; border-radius: 50%; background: radial-gradient(closest-side, rgba(140,200,255,.55), transparent); filter: blur(30px); }
+.collis .hero { right: -120px; top: 40px; width: 1020px; animation: float 8s ease-in-out infinite; }
+.collis .tile { width: 300px; border-radius: 26px; box-shadow: 0 40px 70px rgba(0,10,50,.5); }
+.collis .logo { left: 64px; bottom: 120px; display: flex; gap: 18px; align-items: center; font-size: 56px; font-weight: 700; letter-spacing: -.03em; }
+.collis .logo img { height: 58px; }
+.collis .tag { left: 64px; bottom: 70px; font-size: 22px; opacity: .8; }
+
+/* ─────────── CLAIRE ─────────── */
+.claire { background: #050505; }
+.claire .glow { width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,155,211,.55), rgba(7,72,133,.25) 55%, transparent); filter: blur(10px); }
+.claire .floor { left: -200px; right: -200px; bottom: -120px; height: 460px; transform: perspective(700px) rotateX(62deg); background-image: linear-gradient(rgba(0,155,211,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(0,155,211,.35) 1px, transparent 1px); background-size: 70px 70px; mask-image: linear-gradient(transparent, #000 60%); }
+.claire .avatar { right: 170px; bottom: 0; height: 900px; filter: drop-shadow(-20px 0 60px rgba(0,155,211,.35)); }
+.claire .mesh circle { fill: #39d0ff; animation: blink 4s ease-in-out infinite; }
+.claire .lesson { left: 90px; top: 210px; width: 560px; padding: 18px; animation: float 8s ease-in-out infinite; }
+.claire .lesson img { width: 100%; border-radius: 12px; display: block; }
+.claire .lesson p { margin-top: 16px; font-size: 22px; font-weight: 600; }
+.claire .chip { left: 120px; top: 690px; }
+.claire .logo { left: 64px; bottom: 64px; display: flex; gap: 14px; align-items: center; font-size: 40px; font-weight: 700; letter-spacing: .02em; }
+.claire .logo img { height: 34px; }
+
+/* ─────────── SORANO ─────────── */
+.sorano { background: #0c0a14; }
+.sorano .blob { border-radius: 50%; filter: blur(90px); opacity: .85; }
+.sorano .frame { left: 560px; top: 160px; width: 520px; height: 680px; }
+.sorano .frame i { position: absolute; width: 54px; height: 54px; border-color: rgba(255,255,255,.85); border-style: solid; border-width: 0; }
+.sorano .laser { left: 520px; width: 600px; top: 170px; height: 2px; background: linear-gradient(90deg, transparent, #fff, transparent); box-shadow: 0 0 24px 6px rgba(242,172,62,.8); animation: scan 8s ease-in-out infinite; }
+.sorano .bars { left: 64px; bottom: 150px; display: flex; gap: 8px; align-items: center; height: 90px; }
+.sorano .bars span { width: 8px; height: 90px; border-radius: 9px; background: linear-gradient(#69BFF9, #B96AF3, #E9685E, #F2AC3E); animation: bar 1s ease-in-out infinite; transform-origin: center; }
+.sorano .logo { left: 64px; bottom: 64px; display: flex; gap: 18px; align-items: center; font-size: 46px; font-weight: 700; letter-spacing: -.02em; }
+.sorano .logo img { height: 40px; }
+
+/* ─────────── LALA ─────────── */
+.lala { background: radial-gradient(1200px 900px at 70% 60%, #0d4d42 0%, #05322B 45%, #021a16 100%); color: #FCFCFC; }
+.lala .arch { left: 90px; top: 200px; width: 430px; height: 600px; border-radius: 215px 215px 24px 24px; overflow: hidden; box-shadow: 0 50px 90px rgba(0,0,0,.45); border: 1px solid rgba(223,168,93,.6); }
+.lala .arch img { width: 100%; height: 100%; object-fit: cover; animation: kb 8s ease-in-out infinite; }
+.lala .house { right: 40px; top: 170px; width: 900px; animation: float 8s ease-in-out infinite; }
+.lala .pin { width: 64px; height: 64px; }
+.lala .gold { color: #DFA85D; }
+.lala .logo { left: 90px; bottom: 70px; display: flex; gap: 16px; align-items: center; font-size: 44px; font-weight: 700; letter-spacing: -.02em; }
+.lala .logo img { height: 40px; filter: brightness(0) saturate(100%) invert(76%) sepia(28%) saturate(800%) hue-rotate(345deg) brightness(95%); }
+
+/* ─────────── QUANTALEDGER ─────────── */
+.ql { background: linear-gradient(150deg, #7b7bff 0%, #4747e6 40%, #15155e 100%); }
+.ql .gridbg { inset: 0; background-image: radial-gradient(rgba(255,255,255,.25) 1.4px, transparent 1.4px); background-size: 34px 34px; mask-image: radial-gradient(ellipse at 60% 50%, #000 30%, transparent 75%); }
+.ql .van { left: 520px; top: 380px; width: 820px; filter: drop-shadow(0 40px 50px rgba(0,0,40,.5)); animation: float 8s ease-in-out infinite; }
+.ql .route path { fill: none; stroke: #FEA301; stroke-width: 4; stroke-dasharray: 2 18; stroke-linecap: round; animation: dash 8s linear infinite; }
+.ql .qr { left: 100px; top: 190px; width: 330px; padding: 24px; animation: float 8s ease-in-out infinite; }
+.ql .qr img { width: 100%; background: #fff; border-radius: 14px; padding: 16px; image-rendering: pixelated; }
+.ql .block { width: 74px; height: 74px; border-radius: 16px; border: 2px solid rgba(255,255,255,.7); background: rgba(255,255,255,.1); }
+.ql .logo { left: 64px; bottom: 64px; }
+.ql .logo img { height: 56px; filter: brightness(0) invert(1); }
+
+/* ─────────── ACCOUNTABILLS ─────────── */
+.ab { background: radial-gradient(1000px 800px at 65% 45%, #8a7dff 0%, #6B5EDA 35%, #241a6b 80%); }
+.ab .icon { left: 900px; top: 250px; width: 420px; border-radius: 96px; box-shadow: 0 60px 120px rgba(20,0,80,.6), 0 0 0 1px rgba(255,255,255,.3); animation: float 8s ease-in-out infinite; }
+.ab .ring { left: 860px; top: 210px; width: 500px; height: 500px; border-radius: 50%; border: 1px dashed rgba(255,255,255,.35); animation: spin 32s linear infinite; }
+.ab .req { width: 470px; padding: 26px 28px; }
+.ab .row { display: flex; align-items: center; gap: 16px; }
+.ab .av { width: 52px; height: 52px; border-radius: 50%; }
+.ab .amt { font-size: 46px; font-weight: 700; letter-spacing: -.02em; margin: 18px 0 6px; }
+.ab .ok { background: #22c55e; color: #04220f; padding: 8px 16px; border-radius: 99px; font-weight: 700; font-size: 17px; }
+.ab .bar { height: 10px; border-radius: 10px; background: rgba(255,255,255,.2); margin-top: 18px; overflow: hidden; }
+.ab .bar span { display: block; height: 100%; width: 64%; background: #fff; border-radius: 10px; }
+.ab .logo { left: 64px; bottom: 64px; display: flex; gap: 18px; align-items: center; }
+.ab .logo .m { height: 36px; }
+.ab .logo .w { height: 30px; filter: brightness(0) invert(1); }
+
+/* ─────────── TUJYANE ─────────── */
+.tj { background: #0b0b0c; }
+.tj .banner { left: -200px; top: -60px; width: 2100px; opacity: .95; animation: kb 8s ease-in-out infinite; }
+.tj .shade { inset: 0; background: radial-gradient(900px 700px at 70% 55%, transparent, rgba(11,11,12,.75) 70%), linear-gradient(90deg, rgba(11,11,12,.85), transparent 55%); }
+.tj .phone { filter: drop-shadow(0 50px 70px rgba(0,0,0,.6)); }
+.tj .car { left: 70px; top: 330px; width: 560px; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); animation: float 8s ease-in-out -2s infinite; }
+.tj .word { left: 64px; bottom: 62px; font-size: 64px; font-weight: 700; letter-spacing: -.035em; line-height: 1.04; }
+.tj .word mark { background: #C6FC2E; color: #0b0b0c; padding: 0 .18em; border-radius: .12em; }
+.tj .logo { left: 64px; top: 130px; display: flex; gap: 16px; align-items: center; font-size: 44px; font-weight: 700; letter-spacing: -.03em; }
+.tj .logo img { height: 46px; filter: brightness(0) saturate(100%) invert(91%) sepia(60%) saturate(800%) hue-rotate(20deg) brightness(105%); }
+
+/* ─────────── UWERA ─────────── */
+.uw { background: #efe9df; color: #15120e; }
+.uw .orb { width: 760px; height: 760px; border-radius: 50%; background: conic-gradient(from 90deg, #f2c48a, #e98b6a, #b48cff, #7df9e4, #f2c48a); filter: blur(70px); opacity: .75; animation: spin 16s linear infinite; }
+.uw .word { left: 64px; bottom: 40px; font-family: 'Instrument Serif', serif; font-size: 360px; line-height: .8; letter-spacing: -.03em; }
+.uw .word i { font-size: 120px; }
+.uw .lines { inset: 0; background: repeating-linear-gradient(90deg, rgba(21,18,14,.06) 0 1px, transparent 1px 160px); }
+</style>
+</head>
+<body>
+
+<!-- LIBBLIO -->
+<section class="f libblio grain" id="libblio">
+  <div class="meta mono"><i></i><span>Libblio · Library SaaS</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="stage"><img class="dash" src="a/libblio-dash.png" /></div>
+  <img class="abs ov" src="a/libblio-overview.png" />
+  <div class="abs badge">
+    <svg viewBox="0 0 230 230" width="230" height="230">
+      <defs><path id="c" d="M115,115 m-92,0 a92,92 0 1,1 184,0 a92,92 0 1,1 -184,0" /></defs>
+      <text fill="#fff" font-family="JetBrains Mono" font-size="15" letter-spacing="3.4"><textPath href="#c">TICON AFRICA · STARTUP OF THE YEAR · TICON AFRICA · STARTUP OF THE YEAR ·</textPath></text>
+    </svg>
+    <div class="core"><div><div style="font-size:42px">2025</div><div style="font-size:12px;letter-spacing:.2em;margin-top:6px">WINNER</div></div></div>
+  </div>
+  <div class="abs logo"><img src="a/libblio-logo.svg" />Libblio</div>
+</section>
+
+<!-- COLLIS -->
+<section class="f collis grain" id="collis">
+  <div class="meta mono"><i></i><span>Collis · Fintech · Web + Mobile</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs streak" style="left:-300px;top:-120px;animation:drift 8s ease-in-out infinite"></div>
+  <div class="abs streak" style="right:-500px;bottom:-200px;animation:drift2 8s ease-in-out infinite"></div>
+  <img class="abs hero shadow" src="a/collis-app.png" />
+  <img class="abs tile" src="a/screen-send-money.png" style="left:110px;top:170px;--r:-5deg;animation:floatB 8s ease-in-out infinite" />
+  <img class="abs tile" src="a/screen-topup.png" style="left:360px;top:330px;--r:4deg;animation:floatB 8s ease-in-out -4s infinite" />
+  <div class="pill glass" style="left:520px;top:560px;animation:float 8s ease-in-out -2s infinite"><span class="dot" style="background:#ffcc00"></span>MTN MoMo</div>
+  <div class="pill glass" style="left:680px;top:780px;animation:float 8s ease-in-out -5s infinite"><span class="dot" style="background:#ff2e2e"></span>Airtel Money</div>
+  <div class="pill glass" style="left:120px;top:640px;animation:float 8s ease-in-out -1s infinite"><span class="dot" style="background:#9fd3ff"></span>PayPal withdraw</div>
+  <div class="abs logo"><img src="a/collis-logo.svg" />Collis</div>
+  <div class="abs tag">Pay easily in Rwanda — we handle local payments for you.</div>
+</section>
+
+<!-- CLAIRE -->
+<section class="f claire grain" id="claire">
+  <div class="meta mono"><i></i><span>Claire AI · EdTech</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs glow" style="right:-60px;top:20px;animation:drift 8s ease-in-out infinite"></div>
+  <div class="abs floor"></div>
+  <img class="abs avatar" src="a/claire-avatar.png" />
+  <svg class="abs mesh" style="right:170px;bottom:0" width="750" height="900" viewBox="0 0 750 900">
+    <g opacity=".9">
+      <circle cx="300" cy="300" r="3.2" /><circle cx="380" cy="292" r="3.2" style="animation-delay:-1s" /><circle cx="460" cy="300" r="3.2" style="animation-delay:-2s" />
+      <circle cx="330" cy="360" r="3.2" style="animation-delay:-3s" /><circle cx="430" cy="360" r="3.2" style="animation-delay:-.5s" /><circle cx="380" cy="420" r="3.2" style="animation-delay:-1.5s" />
+      <circle cx="340" cy="480" r="3.2" style="animation-delay:-2.5s" /><circle cx="420" cy="480" r="3.2" style="animation-delay:-3.5s" /><circle cx="380" cy="540" r="3.2" />
+    </g>
+  </svg>
+  <div class="abs lesson glass"><img src="a/claire-lesson.png" /><p>Lesson · Photosynthesis <span style="opacity:.55;font-weight:400">— generated live</span></p></div>
+  <div class="pill glass chip"><span class="dot" style="background:#009BD3"></span>AI Tutor is listening…</div>
+  <div class="abs logo"><img src="a/claire-logo.svg" />CLAIRE<span style="color:#009BD3">AI</span></div>
+</section>
+
+<!-- SORANO -->
+<section class="f sorano grain" id="sorano">
+  <div class="meta mono"><i></i><span>Sorano AI · Voice · 3D · AR</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs blob" style="left:120px;top:80px;width:520px;height:520px;background:#69BFF9;animation:drift 8s ease-in-out infinite"></div>
+  <div class="abs blob" style="left:620px;top:-60px;width:560px;height:560px;background:#B96AF3;animation:drift2 8s ease-in-out infinite"></div>
+  <div class="abs blob" style="left:980px;top:420px;width:520px;height:520px;background:#E9685E;animation:drift 8s ease-in-out -4s infinite"></div>
+  <div class="abs blob" style="left:420px;top:560px;width:460px;height:460px;background:#F2AC3E;animation:drift2 8s ease-in-out -4s infinite"></div>
+  <svg class="abs" style="left:560px;top:150px" width="520" height="700" viewBox="0 0 520 700">
+    <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffe7c7"/></linearGradient></defs>
+    <!-- agaseke basket: lathe wireframe -->
+    <g fill="none" stroke="url(#sg)" stroke-width="1.6" opacity=".95" id="basket"></g>
+  </svg>
+  <div class="abs frame"><i style="left:0;top:0;border-left-width:3px;border-top-width:3px"></i><i style="right:0;top:0;border-right-width:3px;border-top-width:3px"></i><i style="left:0;bottom:0;border-left-width:3px;border-bottom-width:3px"></i><i style="right:0;bottom:0;border-right-width:3px;border-bottom-width:3px"></i></div>
+  <div class="abs laser"></div>
+  <div class="pill glass" style="left:1140px;top:240px;animation:float 8s ease-in-out infinite">● Photogrammetry · 3D</div>
+  <div class="pill glass" style="left:1180px;top:640px;animation:float 8s ease-in-out -4s infinite">AR · Place in your space</div>
+  <div class="abs bars" id="bars"></div>
+  <div class="abs logo"><img src="a/sorano-logo.svg" />Sorano</div>
+</section>
+
+<!-- LALA -->
+<section class="f lala grain" id="lala">
+  <div class="meta mono gold"><i></i><span>LaLa Stays · Marketplace</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs arch"><img src="a/lala-villa.jpg" /></div>
+  <img class="abs house shadow" src="a/lala-house.png" />
+  <svg class="abs" style="left:500px;top:120px" width="1100" height="820" viewBox="0 0 1100 820"><path d="M60 700 C 260 640, 300 420, 520 430 S 860 260, 1000 120" fill="none" stroke="#DFA85D" stroke-width="3" stroke-dasharray="3 14" stroke-linecap="round" style="animation:dash 8s linear infinite"/></svg>
+  <div class="abs" style="left:540px;top:770px"><div class="abs" style="width:28px;height:28px;border-radius:50%;background:#DFA85D;left:18px;top:18px;animation:pulse 2s ease-out infinite"></div><div style="width:64px;height:64px;border-radius:50%;background:#DFA85D;display:grid;place-items:center;color:#05322B;font-weight:800;font-size:24px">★</div></div>
+  <div class="pill glass" style="left:1180px;top:780px;color:#FCFCFC;animation:float 8s ease-in-out -3s infinite">Kigali · 4 nights · Verified</div>
+  <div class="abs logo"><img src="a/lala-logo.svg" /><span>LaLa <span class="gold">Stays</span></span></div>
+</section>
+
+<!-- QUANTALEDGER -->
+<section class="f ql grain" id="quantaledger">
+  <div class="meta mono"><i></i><span>QuantaLedger · Supply chain</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs gridbg"></div>
+  <svg class="abs route" style="left:0;top:0" width="1600" height="1000"><path d="M430 420 C 640 300, 820 260, 1040 300 S 1380 420, 1500 300" /><path d="M260 760 C 520 860, 900 880, 1500 820" /></svg>
+  <div class="abs qr glass"><img src="a/ql-qr.png" /><div class="pill" style="position:static;margin-top:18px;background:#4CD666;color:#062b0e;justify-content:center">✓ Authentic product</div></div>
+  <img class="abs van" src="a/ql-van.png" />
+  <div class="abs" style="left:900px;top:150px;display:flex;gap:18px;align-items:center">
+    <div class="block"></div><div style="width:30px;height:2px;background:#fff;opacity:.7"></div><div class="block" style="background:rgba(254,163,1,.35);border-color:#FEA301"></div><div style="width:30px;height:2px;background:#fff;opacity:.7"></div><div class="block"></div><div style="width:30px;height:2px;background:#fff;opacity:.7"></div><div class="block" style="animation:blink 4s infinite"></div>
+  </div>
+  <div class="pill glass" style="left:1180px;top:240px;animation:float 8s ease-in-out -2s infinite"><span class="dot" style="background:#EF1313"></span>2 suspicious scans</div>
+  <div class="abs logo"><img src="a/ql-logo.svg" /></div>
+</section>
+
+<!-- ACCOUNTABILLS -->
+<section class="f ab grain" id="accountabills">
+  <div class="meta mono"><i></i><span>Accountabills · iOS + Android</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs ring"></div>
+  <img class="abs icon" src="a/ab-icon.png" />
+  <div class="abs req glass" style="left:110px;top:190px;animation:float 8s ease-in-out infinite">
+    <div class="row"><div class="av" style="background:linear-gradient(135deg,#ffb38a,#ff6a8a)"></div><div><div style="font-weight:700;font-size:21px">Spending request</div><div style="opacity:.7;font-size:17px">Needs 2 approvals · receipt attached</div></div></div>
+    <div class="amt">$45.00</div>
+    <div class="row" style="justify-content:space-between"><div style="display:flex"><div class="av" style="width:36px;height:36px;background:#7df9e4;border:2px solid #6B5EDA"></div><div class="av" style="width:36px;height:36px;margin-left:-10px;background:#ffd23f;border:2px solid #6B5EDA"></div></div><span class="ok">Approved</span></div>
+  </div>
+  <div class="abs req glass" style="left:300px;top:560px;width:420px;animation:float 8s ease-in-out -4s infinite">
+    <div class="row" style="justify-content:space-between"><div style="font-weight:700;font-size:21px">Card limit</div><div style="opacity:.75">$320 / $500</div></div>
+    <div class="bar"><span></span></div>
+  </div>
+  <div class="abs logo"><img class="m" src="a/ab-logo.svg" /><img class="w" src="a/ab-wordmark.svg" /></div>
+</section>
+
+<!-- TUJYANE -->
+<section class="f tj grain" id="tujyane">
+  <div class="meta mono"><i></i><span>Tujyane · Mobility super-app</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <img class="abs banner" src="a/download-banner.webp" />
+  <div class="abs shade"></div>
+  <img class="abs phone" src="a/phone-bookings-t.png" style="left:780px;top:190px;width:330px;--r:-8deg;animation:floatB 8s ease-in-out -3s infinite" />
+  <img class="abs phone" src="a/phone-cart-t.png" style="left:1240px;top:200px;width:300px;--r:8deg;animation:floatB 8s ease-in-out -6s infinite" />
+  <img class="abs phone" src="a/phone-services-t.png" style="left:1010px;top:110px;width:350px;animation:float 8s ease-in-out infinite" />
+  <div class="abs logo"><img src="a/tj-logo.svg" />tujyane</div>
+  <div class="pill glass" style="left:470px;top:780px;animation:float 8s ease-in-out -4s infinite"><span class="dot" style="background:#C6FC2E"></span>Arrival 2:36 PM — your location</div>
+  <div class="abs word"><mark>Everything</mark> you need<br/>in one <mark>app</mark></div>
+</section>
+
+<!-- UWERA -->
+<section class="f uw" id="uwera">
+  <div class="meta mono"><i></i><span>Uwera · uwera.rw</span></div>
+  <div class="sig mono">Remy Tresor — Selected work</div>
+  <div class="abs lines"></div>
+  <div class="abs orb" style="right:-80px;top:-140px"></div>
+  <div class="abs word">Uwera<i>.rw</i></div>
+</section>
+
+<script>
+  // Sorano basket wireframe (agaseke silhouette, lathed)
+  const g = document.getElementById('basket')
+  const prof = (t) => { // t 0..1 bottom→top, radius profile of an agaseke basket + conical lid
+    if (t < .55) return 150 + 70 * Math.sin(t / .55 * Math.PI * .5)
+    if (t < .62) return 220 - (t - .55) / .07 * 40
+    return Math.max(4, 180 * (1 - (t - .62) / .38) ** 1.4)
+  }
+  const cx = 260, y0 = 40, h = 620
+  for (let i = 0; i <= 22; i++) {
+    const t = i / 22, y = y0 + h - t * h, r = prof(t)
+    const e = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse')
+    e.setAttribute('cx', cx); e.setAttribute('cy', y); e.setAttribute('rx', r); e.setAttribute('ry', r * .22)
+    e.setAttribute('opacity', (.35 + .65 * (i % 2)).toFixed(2)); g.appendChild(e)
+  }
+  for (let k = 0; k < 18; k++) {
+    const a = k / 18 * Math.PI * 2; let d = ''
+    for (let i = 0; i <= 44; i++) { const t = i / 44, r = prof(t), y = y0 + h - t * h + Math.sin(a) * r * .22; d += (i ? 'L' : 'M') + (cx + Math.cos(a) * r).toFixed(1) + ' ' + y.toFixed(1) }
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', d); p.setAttribute('opacity', Math.sin(a) > 0 ? .95 : .3); g.appendChild(p)
+  }
+  const bars = document.getElementById('bars')
+  for (let i = 0; i < 28; i++) { const s = document.createElement('span'); s.style.animationDelay = (-(i * 137 % 1000) / 1000) + 's'; s.style.animationDuration = (0.5 + (i * 53 % 50) / 100) + 's'; bars.appendChild(s) }
+  // show requested frame
+  const id = location.hash.slice(1) || 'libblio'
+  document.getElementById(id).classList.add('on')
+  document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {})))).then(() => { document.title = 'ready' })
+</script>
+</body>
+</html>

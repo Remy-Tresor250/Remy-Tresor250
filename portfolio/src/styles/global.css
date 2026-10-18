@@ -1,0 +1,272 @@
+:root {
+  --ink: #05060a;
+  --ink-2: #0b0d14;
+  --ink-3: #12151f;
+  --bone: #ece7dc;
+  --bone-2: #cfc9bc;
+  --mute: rgba(236, 231, 220, 0.56);
+  --faint: rgba(236, 231, 220, 0.32);
+  --line: rgba(236, 231, 220, 0.12);
+  --ion: #7df9e4;
+  --violet: #9b87ff;
+  --ember: #ff7a45;
+  --gold: #ffc76b;
+
+  --f-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --f-serif: 'Instrument Serif', 'Times New Roman', serif;
+  --f-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  --gutter: clamp(16px, 3.4vw, 56px);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--ink);
+  -webkit-text-size-adjust: 100%;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--f-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ion);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--ion);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.webgl {
+  position: fixed !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100lvh !important;
+  z-index: 0;
+  pointer-events: none;
+}
+
+main {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── type ─────────────────────────────────────────── */
+.mono {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 450;
+}
+.serif {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.serif-i {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.display {
+  font-weight: 560;
+  letter-spacing: -0.055em;
+  line-height: 0.86;
+}
+.h2 {
+  font-size: clamp(2.6rem, 7.4vw, 8.4rem);
+  font-weight: 540;
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+}
+.lead {
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  line-height: 1.45;
+  color: var(--mute);
+  max-width: 34ch;
+}
+.ion {
+  color: var(--ion);
+}
+.mute {
+  color: var(--mute);
+}
+
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* split text */
+.char,
+.word {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ── layout primitives ───────────────────────────── */
+.section {
+  position: relative;
+  padding: 0 var(--gutter);
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--mute);
+}
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+  background: rgba(5, 6, 10, 0.4);
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 26px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bone);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform 0.6s var(--ease-out);
+  z-index: -1;
+}
+.btn:hover {
+  color: var(--ink);
+  border-color: var(--bone);
+}
+.btn:hover::before {
+  transform: translateY(0);
+}
+.btn.solid {
+  background: var(--bone);
+  color: var(--ink);
+  border-color: var(--bone);
+}
+.btn.solid::before {
+  background: var(--ion);
+}
+.btn .arrow {
+  width: 14px;
+  height: 14px;
+}
+
+/* DOM images that WebGL takes over */
+.gl-on [data-gl] > img {
+  opacity: 0;
+}
+[data-gl] {
+  position: relative;
+}
+[data-gl] > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s;
+}
+
+/* ── grain fallback for no-webgl ─────────────────── */
+.no-webgl body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(1200px 800px at 70% 20%, rgba(125, 249, 228, 0.08), transparent),
+    radial-gradient(900px 700px at 10% 90%, rgba(155, 135, 255, 0.08), transparent);
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
