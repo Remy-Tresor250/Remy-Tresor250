@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="130" viewBox="0 0 1000 130" role="img" aria-label="A bee flying across, thanks for stopping by">
+<title>thanks for stopping by</title>
+<defs>
+<linearGradient id="hz" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF5FA2" stop-opacity="0"/><stop offset=".5" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FFD54A" stop-opacity="0"/></linearGradient>
+<style>
+.bye{font:500 15px 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', monospace;fill:#8F9BD8;letter-spacing:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</defs>
+<path d="M-40 78 C 120 30, 220 112, 360 70 S 600 30, 720 74 S 920 104, 1040 60" fill="none" stroke="#FFD54A" stroke-opacity=".45" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round"/>
+<line x1="80" x2="920" y1="112" y2="112" stroke="url(#hz)" stroke-width="1.5"/>
+<g>
+<animateMotion dur="9s" repeatCount="indefinite" rotate="auto" path="M-40 78 C 120 30, 220 112, 360 70 S 600 30, 720 74 S 920 104, 1040 60"/>
+<ellipse cx="-4" cy="-9" rx="9" ry="6" fill="#ffffff" opacity=".75" stroke="#8F9BD8" stroke-width="1"><animate attributeName="ry" values="6;1.5;6" dur=".18s" repeatCount="indefinite"/></ellipse>
+<ellipse cx="5" cy="-8" rx="7" ry="5" fill="#ffffff" opacity=".6" stroke="#8F9BD8" stroke-width="1"><animate attributeName="ry" values="5;1.2;5" dur=".18s" repeatCount="indefinite"/></ellipse>
+<ellipse rx="15" ry="10" fill="#FFD54A"/>
+<path d="M-6 -9.5 v19 M2 -10 v20" stroke="#1c0d38" stroke-width="4"/>
+<circle cx="12" cy="-2" r="1.8" fill="#1c0d38"/>
+<path d="M-15 0 l-6 0" stroke="#1c0d38" stroke-width="2" stroke-linecap="round"/>
+</g>
+<text class="bye" x="500" y="104" text-anchor="middle">thanks for stopping by</text>
+</svg>
