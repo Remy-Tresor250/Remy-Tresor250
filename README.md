@@ -26,6 +26,9 @@
   <img src="./assets/contrib-3d.svg" width="100%" alt="My GitHub contributions over the last year, stacked up as a 3D skyline." />
 </p>
 
+<!-- years:start -->
+<!-- years:end -->
+
 <p align="center">
   <img src="./assets/footer.svg" width="100%" alt="thanks for stopping by" />
 </p>
