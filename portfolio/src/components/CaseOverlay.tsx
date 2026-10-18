@@ -149,7 +149,7 @@ export function CaseOverlay() {
           <div className={`cs-gallery n${p.gallery.length}`}>
             {p.gallery.map((src) => (
               <figure key={src}>
-                <img src={src} alt={`${p.name} screen`} loading="lazy" />
+                <img src={src} alt={`${p.name} screen`} decoding="async" />
               </figure>
             ))}
           </div>

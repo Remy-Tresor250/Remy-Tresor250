@@ -87,7 +87,6 @@
   border-radius: 18px;
   overflow: hidden;
   aspect-ratio: 16 / 10;
-  max-height: 80vh;
   background: #000;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
 }

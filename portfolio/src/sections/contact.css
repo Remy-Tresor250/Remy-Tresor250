@@ -17,10 +17,9 @@
 }
 .ct-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 6vw;
+  grid-template-columns: minmax(0, 680px);
+  gap: 7vh;
   margin-top: 8vh;
-  align-items: end;
 }
 .ct-mail {
   display: flex;
@@ -70,9 +69,23 @@
   padding-left: 14px;
   color: var(--ion);
 }
+.ct-sign {
+  width: min(560px, 80vw);
+  margin: 12vh 0 0 auto;
+  overflow: visible;
+}
+.ct-sign path {
+  fill: var(--bone);
+  fill-opacity: 0;
+  stroke: var(--ion);
+  stroke-width: 1.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+}
 .ct-foot {
   margin-top: auto;
-  padding: 10vh 0 calc(var(--gutter) * 0.9);
+  padding: 6vh 0 calc(var(--gutter) * 0.9);
   display: flex;
   justify-content: space-between;
   gap: 18px;

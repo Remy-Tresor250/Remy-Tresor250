@@ -5,6 +5,7 @@ import { sfx, useClock } from '../lib/hooks'
 import { world } from '../lib/world'
 import { ambient } from '../lib/audio'
 import { profile } from '../data/profile'
+import { signature } from '../data/signature'
 import './contact.css'
 
 function Magnetic({ children, strength = 0.35 }: { children: React.ReactNode; strength?: number }) {
@@ -49,6 +50,9 @@ export function Contact() {
     const ctx = gsap.context(() => {
       gsap.from(split.chars, { yPercent: 110, rotate: 8, duration: 1.4, ease: 'expo.out', stagger: 0.025, scrollTrigger: { trigger: '.ct-big', start: 'top 80%' } })
       gsap.from('.ct-in', { y: 40, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: '.ct-big', start: 'top 60%' } })
+      const sign = gsap.timeline({ scrollTrigger: { trigger: '.ct-sign', start: 'top 95%', end: 'bottom 88%', scrub: 0.8 } })
+      sign.fromTo('.ct-sign path', { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'none', duration: 1 })
+      sign.to('.ct-sign path', { fillOpacity: 1, ease: 'none', duration: 0.3 }, 0.65)
     }, el)
     return () => {
       ctx.revert()
@@ -74,8 +78,8 @@ export function Contact() {
       data-chapter="7"
       data-world={world([
         { at: 0.1, morph: 4.5, x: 0, y: 0.05, scale: 0.9, alpha: 0.6, warm: 0.2, rotX: 0.2, rotY: 0 },
-        { at: 0.5, morph: 5, x: 0.26, y: 0.16, scale: 0.78, alpha: 1, warm: 0, rotX: 0.1, rotY: 0 },
-        { at: 1, morph: 5, x: 0.27, y: 0.2, scale: 0.72, alpha: 0.85, warm: 0, rotX: 0.2, rotY: 0.6 },
+        { at: 0.5, morph: 5, x: 0.25, y: 0.02, scale: 0.8, alpha: 1, warm: 0, rotX: 0.1, rotY: 0 },
+        { at: 1, morph: 5, x: 0.25, y: 0.06, scale: 0.78, alpha: 0.9, warm: 0, rotX: 0.2, rotY: 0.6 },
       ])}
     >
       <p className="eyebrow mono">Chapter 07 — Contact</p>
@@ -111,6 +115,10 @@ export function Contact() {
           ))}
         </ul>
       </div>
+
+      <svg className="ct-sign" viewBox={signature.viewBox} role="img" aria-label="Signature: Remy Tresor">
+        <path d={signature.d} pathLength={1} />
+      </svg>
 
       <footer className="ct-foot mono">
         <span>© {new Date().getFullYear()} {profile.name}</span>
